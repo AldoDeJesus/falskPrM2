@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head> 
+    <title>Precio de cultivos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 20px;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        form {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 20px;
+            max-width: 400px;
+            margin: 0 auto;
+            border-radius: 5px;
+        }
+
+        form label {
+            display: block;
+            margin-bottom: 10px;
+            color: #666;
+        }
+
+        form input[type="text"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        form input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        #resultado {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+    </style>
+    <script>
+        function obtenerPrecio(event) {
+            event.preventDefault();
+                        
+            const CostCultivation = document.getElementById('CostCultivation').value;
+            const CostCultivation2 = document.getElementById('CostCultivation2').value;
+            const RainFall_Annual = document.getElementById('RainFall_Annual').value;
+            const Yield = document.getElementById('Yield').value;
+
+            fetch('/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `CostCultivation=${CostCultivation}&CostCultivation2=${CostCultivation2}&RainFall_Annual=${RainFall_Annual}&Yield=${Yield}`,
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    document.getElementById('resultado').innerText = 'Error: ' + data.error;
+                } else {
+                    document.getElementById('resultado').innerText = 'El precio por tonelada es: ' + data.categoria;
+                }
+            })
+            .catch(error => {
+                document.getElementById('resultado').innerText = 'Error en la solicitud.';
+                console.error('Error:', error);
+            });
+        }
+    </script>
+</head>
+<body>
+    <h1>Predicción de Precio de Cultivos</h1>
+    <form id="formulario" onsubmit="obtenerPrecio(event)">
+        <label for="CostCultivation">Costo de cultivo en primera fase:</label>
+        <input type="text" id="CostCultivation" name="CostCultivation"><br><br>
+        
+        <label for="CostCultivation2">Costo de cultivo en segunda fase :</label>
+        <input type="text" id="CostCultivation2" name="CostCultivation2"><br><br>
+        
+        <label for="RainFall_Annual">Cantidad de lluvia anual recibida:</label>
+        <input type="text" id="RainFall_Annual" name="RainFall_Annual"><br><br>
+
+        <label for="Yield">cantidad de cultivo producido por unidad de área:</label>
+        <input type="text" id="Yield" name="Yield"><br><br>
+
+        <input type="submit" value="Enviar">
+    </form>
+    <p id="resultado"></p>
+</body>
+</html>
