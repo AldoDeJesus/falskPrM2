@@ -9,7 +9,7 @@ app = Flask(__name__)
 logging.basicConfig(level=logging.DEBUG)
 
 # Cargar el modelo entrenado
-model = joblib.load('modelo_02.pkl')
+model = joblib.load('modeloF_01.pkl')
 app.logger.debug('Modelo cargado correctamente.')
 
 @app.route('/')
@@ -37,8 +37,11 @@ def predict():
         
         app.logger.debug(f'Predicción: {prediction_value}')
         
+        # Formatear el valor de la predicción a 2 decimales
+        prediction_value_formatted = f"{prediction_value:.2f}"
+        
         # Devolver las predicciones como respuesta JSON
-        return jsonify({'categoria': prediction_value})
+        return jsonify({'categoria': prediction_value_formatted})
     except Exception as e:
         app.logger.error(f'Error en la predicción: {str(e)}')
         return jsonify({'error': str(e)}), 400

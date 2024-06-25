@@ -3,57 +3,148 @@
 <head> 
     <title>Precio de cultivos</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-            margin: 20px;
-            padding: 20px;
+        :root {
+            --colorTextos: #4B6E50;
+            --colorFondo: #DFF2DC;
+            --colorBoton: #4CAF50;
         }
 
-        h1 {
-            color: #333;
+        *,
+        ::before,
+        ::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--colorFondo);
+            font-family: 'Poppins', sans-serif;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        h2 {
             text-align: center;
+            margin: 10px 0;
+            font-weight: 800;
+            color: var(--colorTextos);
         }
 
         form {
-            background-color: #fff;
-            border: 1px solid #ccc;
+            background: #fff;
+            width: 30%;
             padding: 20px;
-            max-width: 400px;
-            margin: 0 auto;
-            border-radius: 5px;
+            border-radius: 10px;
+            box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.2);
         }
 
-        form label {
-            display: block;
-            margin-bottom: 10px;
-            color: #666;
-        }
-
-        form input[type="text"] {
-            width: calc(100% - 20px);
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
-            border-radius: 3px;
-        }
-
-        form input[type="submit"] {
+        .form {
             width: 100%;
-            padding: 10px;
-            background-color: #4CAF50;
-            color: white;
+            margin: auto;
+        }
+
+        form .grupo {
+            position: relative;
+            margin: 30px 0;
+        }
+
+        input, textarea {
+            background: none;
+            color: var(--colorTextos);
+            font-size: 18px;
+            padding: 10px 10px 10px 5px;
+            display: block;
+            width: 100%;
             border: none;
-            border-radius: 3px;
+            border-bottom: 1px solid var(--colorTextos);
+            resize: none;
+            transition: border-bottom-color 0.3s;
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-bottom-color: var(--colorBoton);
+        }
+
+        input:focus ~ label, input:valid ~ label,
+        textarea:focus ~ label, textarea:valid ~ label {
+            position: absolute;
+            top: -14px;
+            font-size: 12px;
+            color: var(--colorBoton);
+            transition: top 0.3s ease, font-size 0.3s ease, color 0.3s ease;
+        }
+
+        label {
+            color: var(--colorTextos);
+            font-size: 16px;
+            position: absolute;
+            left: 5px;
+            top: 10px;
+            transition: top 0.3s ease, font-size 0.3s ease, color 0.3s ease;
+            pointer-events: none;
+        }
+
+        input:focus ~ .barra::before, textarea:focus ~ .barra::before {
+            width: 100%;
+        }
+
+        .barra {
+            position: relative;
+            display: block;
+            width: 100%;
+        }
+
+        .barra::before {
+            content: '';
+            height: 2px;
+            width: 0%;
+            bottom: 0;
+            position: absolute;
+            background: var(--colorBoton);
+            transition: width 0.3s ease;
+            left: 0%;
+        }
+
+        button {
+            background: var(--colorBoton);
+            display: block;
+            width: 100px;
+            height: 40px;
+            border: none;
+            color: #fff;
+            border-radius: 4px;
+            font-size: 16px;
+            margin: 10px auto;
             cursor: pointer;
         }
 
-        #resultado {
-            margin-top: 20px;
-            padding: 10px;
-            background-color: #f0f0f0;
-            border: 1px solid #ccc;
-            border-radius: 3px;
+        @media screen and (max-width: 1100px) {
+            form {
+                width: 50%;
+            }
+        }
+
+        @media screen and (max-width: 600px) {
+            form {
+                width: 60%;
+            }
+        }
+
+        @media screen and (max-width: 450px) {
+            form {
+                width: 80%;
+            }
+        }
+
+        @media screen and (max-width: 300px) {
+            form {
+                width: 90%;
+            }
         }
     </style>
     <script>
@@ -88,22 +179,36 @@
     </script>
 </head>
 <body>
-    <h1>Predicción de Precio de Cultivos</h1>
+    
     <form id="formulario" onsubmit="obtenerPrecio(event)">
-        <label for="CostCultivation">Costo de cultivo en primera fase:</label>
-        <input type="text" id="CostCultivation" name="CostCultivation"><br><br>
+        <h2>Predicción de Precio de Cultivos</h2>
+        <div class="grupo">
+            <input type="text" id="CostCultivation" name="CostCultivation" required>
+            <span class="barra"></span>
+            <label for="CostCultivation">Costo de cultivo en primera fase</label>
+        </div>
         
-        <label for="CostCultivation2">Costo de cultivo en segunda fase :</label>
-        <input type="text" id="CostCultivation2" name="CostCultivation2"><br><br>
+        <div class="grupo">
+            <input type="text" id="CostCultivation2" name="CostCultivation2" required>
+            <span class="barra"></span>
+            <label for="CostCultivation2">Costo de cultivo en segunda fase</label>
+        </div>
         
-        <label for="RainFall_Annual">Cantidad de lluvia anual recibida:</label>
-        <input type="text" id="RainFall_Annual" name="RainFall_Annual"><br><br>
+        <div class="grupo">
+            <input type="text" id="RainFall_Annual" name="RainFall_Annual" required>
+            <span class="barra"></span>
+            <label for="RainFall_Annual">Cantidad de lluvia anual recibida</label>
+        </div>
 
-        <label for="Yield">cantidad de cultivo producido por unidad de área:</label>
-        <input type="text" id="Yield" name="Yield"><br><br>
+        <div class="grupo">
+            <input type="text" id="Yield" name="Yield" required>
+            <span class="barra"></span>
+            <label for="Yield">Cantidad de cultivo producido por unidad de área</label>
+        </div>
 
-        <input type="submit" value="Enviar">
+        <button type="submit">Enviar</button><br>
+        <p id="resultado"></p>
     </form>
-    <p id="resultado"></p>
+    
 </body>
 </html>
